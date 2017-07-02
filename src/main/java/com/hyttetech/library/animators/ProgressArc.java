@@ -1,41 +1,58 @@
-package com.hyttetech.library;
-
-/**
- * Created by koushik on 1/7/17.
- */
+package com.hyttetech.library.animators;
 
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.ColorFilter;
 import android.graphics.Paint;
 import android.graphics.PixelFormat;
+import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.RectF;
-import android.graphics.drawable.Animatable;
-import android.graphics.drawable.Drawable;
 import android.view.animation.AnimationUtils;
 
-public class ExpandingMultipleCircle extends Drawable implements Animatable, Runnable {
+import com.hyttetech.library.Animators;
 
+/**
+ * Created by koushik on 2/7/17.
+ */
+
+public class ProgressArc extends Animators {
     private Paint mPaint;
     private float mRadius;
 
     private long mStartTicks = 0;
     private boolean mIsRunning = false;
 
-    public ExpandingMultipleCircle(float radius) {
+    public ProgressArc()
+    {
+        super();
+
+        mRadius = 360;
+        mPaint = new Paint();
+        mPaint.setStyle(Paint.Style.FILL);
+        mPaint.setColor(Color.BLACK);
+        mPaint.setAntiAlias(true);
+        mPaint.setStrokeWidth(2);
+    }
+
+    public ProgressArc(float radius) {
         super();
 
         mRadius = radius;
 
         mPaint = new Paint();
 
-        mPaint.setStyle(Paint.Style.STROKE);
+        mPaint.setStyle(Paint.Style.FILL);
         mPaint.setColor(Color.BLACK);
         mPaint.setAntiAlias(true);
-        mPaint.setStrokeWidth(5);
+        mPaint.setStrokeWidth(2);
         //mPaint.setAlpha(10);
 
+    }
+
+    @Override
+    public void setRadius(float radius) {
+        mRadius=360;
     }
 
     public void setColor(int color)
@@ -45,9 +62,19 @@ public class ExpandingMultipleCircle extends Drawable implements Animatable, Run
 
     @Override
     public void draw(Canvas canvas) {
+        int canvasW = canvas.getWidth();
+        int canvasH = canvas.getHeight();
+        Point centerOfCanvas = new Point(canvasW / 2, canvasH / 2);
+        int rectW = 100;
+        int rectH = 100;
+        int left = centerOfCanvas.x - (rectW / 2);
+        int top = centerOfCanvas.y - (rectH / 2);
+        int right = centerOfCanvas.x + (rectW / 2);
+        int bottom = centerOfCanvas.y + (rectH / 2);
+        RectF rect = new RectF(left, top, right, bottom);
         float loopPercent = calculateCurrentLoopPercent();
 
-        float alpha = -(loopPercent * loopPercent)+1;
+        float alpha = -150;
 
         mPaint.setAlpha((int) (255 * alpha));
 
@@ -56,11 +83,11 @@ public class ExpandingMultipleCircle extends Drawable implements Animatable, Run
         Rect bounds = getBounds();
         float x = ((bounds.right - bounds.left) / 2f) + bounds.left;
         float y = ((bounds.bottom - bounds.top) / 2f) + bounds.top;
-        canvas.drawColor(Color.TRANSPARENT);
+       /* canvas.drawColor(Color.TRANSPARENT);
         canvas.drawCircle(x, y, radius, mPaint);
         canvas.drawCircle(x, y, (float) (radius/1.5), mPaint);
-        canvas.drawCircle(x, y, (float) (radius/2.5), mPaint);
-
+        canvas.drawCircle(x, y, (float) (radius/2.5), mPaint);*/
+        canvas.drawArc(rect, 15, radius, true, mPaint);
     }
 
     private float calculateCurrentLoopPercent() {

@@ -6,23 +6,10 @@ package com.hyttetech.library;
 
 
 import android.content.Context;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.ColorFilter;
-import android.graphics.Paint;
-import android.graphics.Path;
-import android.graphics.PixelFormat;
-import android.graphics.Rect;
-import android.graphics.drawable.Animatable;
-import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.support.annotation.Nullable;
-import android.support.annotation.RequiresApi;
 import android.util.AttributeSet;
-import android.view.MotionEvent;
-import android.view.View;
-import android.view.animation.AnimationUtils;
-import android.widget.ImageView;
+
+import com.hyttetech.library.animators.ExpandingCircle;
 
 /**
  * Created by koushik on 27/6/17.
@@ -30,14 +17,7 @@ import android.widget.ImageView;
 
 public class LoadingView extends android.support.v7.widget.AppCompatImageView  {
 
-    ExpandingCircle expandingCircle;
-    ExpandingMultipleCircle circle=new ExpandingMultipleCircle(100);
-    private Paint paint = new Paint();
-    private Paint paint1=new Paint();
-    Path path=new Path();
-    private float mRadius;
-    private long mStartTicks = 0;
-    private boolean mIsRunning = false;
+    Animators animator=new ExpandingCircle(100);
     public LoadingView(Context context) {
         super(context);
         init(null,0);
@@ -55,43 +35,60 @@ public class LoadingView extends android.support.v7.widget.AppCompatImageView  {
 
     private void init(AttributeSet attributeSet,int defStyleAttr)
     {
-
-        paint = new Paint();
-        mRadius=100;
-
-        paint.setStyle(Paint.Style.FILL);
-        paint.setColor(Color.BLACK);
-        paint.setAntiAlias(true);
-        paint.setStrokeWidth(2);
-        paint1.setStyle(Paint.Style.STROKE);
-        paint1.setColor(Color.BLACK);
-        paint1.setAntiAlias(true);
-        //setDrawable(circle);
-        setImageDrawable(circle);
+        setImageDrawable(animator);
+        animator.start();
 
 
     }
 
-    public void setDrawable(Drawable expandingCircle) {
-        circle= (ExpandingMultipleCircle) expandingCircle;
+    public void setAnimator(Animators animators) {
+        animator= animators;
+        System.out.print("hiii");
 
-        if (circle != null) {
-            circle.setCallback(this);
-            setImageDrawable(circle);
-            //invalidateDrawable(circle);
+
+        if (animator != null) {
+            animator.setCallback(this);
+            setImageDrawable(animator);
+            System.out.print("hiii1");
+
         }
         postInvalidate();
 
     }
 
+    public void setAnimator(String animatorName)
+    {
+        System.out.print("hii :"+animatorName);
+        StringBuilder drawableClassName=new StringBuilder();
+        if (!animatorName.contains(".")){
+            String defaultPackageName=getClass().getPackage().getName();
+            drawableClassName.append(defaultPackageName)
+                    .append(".");
+        }
+        drawableClassName.append(animatorName);
+        System.out.print("hii :"+drawableClassName);
+        try {
+            Class<?> drawableClass = Class.forName(drawableClassName.toString());
+            Animators animators = (Animators) drawableClass.newInstance();
+            animators.setRadius(100);
+            setAnimator(animators);
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void start()
     {
-        circle.start();
+        animator.start();
     }
 
     public void stop()
     {
-        circle.stop();
+        animator.stop();
 
     }
 
