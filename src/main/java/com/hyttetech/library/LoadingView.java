@@ -63,6 +63,7 @@ public class LoadingView extends android.support.v7.widget.AppCompatImageView  {
         if (!animatorName.contains(".")){
             String defaultPackageName=getClass().getPackage().getName();
             drawableClassName.append(defaultPackageName)
+                    .append(".animators")
                     .append(".");
         }
         drawableClassName.append(animatorName);

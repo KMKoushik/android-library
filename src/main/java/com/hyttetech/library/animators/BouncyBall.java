@@ -1,5 +1,9 @@
 package com.hyttetech.library.animators;
 
+/**
+ * Created by koushik on 2/7/17.
+ */
+
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.ColorFilter;
@@ -13,21 +17,24 @@ import android.view.animation.AnimationUtils;
 import com.hyttetech.library.Animators;
 
 /**
- * Created by koushik on 2/7/17.
+ * Created by koushik on 1/7/17.
  */
 
-public class ProgressArc extends Animators {
+
+
+public class BouncyBall extends Animators {
+
     private Paint mPaint;
     private float mRadius;
 
     private long mStartTicks = 0;
     private boolean mIsRunning = false;
 
-    public ProgressArc()
+    public BouncyBall()
     {
         super();
 
-        mRadius = 360;
+        mRadius = 100;
         mPaint = new Paint();
         mPaint.setStyle(Paint.Style.FILL);
         mPaint.setColor(Color.BLACK);
@@ -35,7 +42,7 @@ public class ProgressArc extends Animators {
         mPaint.setStrokeWidth(2);
     }
 
-    public ProgressArc(float radius) {
+    public BouncyBall(float radius) {
         super();
 
         mRadius = radius;
@@ -52,7 +59,7 @@ public class ProgressArc extends Animators {
 
     @Override
     public void setRadius(float radius) {
-        mRadius=360;
+        mRadius=100;
     }
 
     public void setColor(int color)
@@ -80,10 +87,10 @@ public class ProgressArc extends Animators {
         mPaint.setAlpha((int) (255 * alpha));
 
         float radius = loopPercent * mRadius;
-        if(radius==360) {
+        if(radius==(mRadius-20)) {
             flag = 1;
         }
-        if(radius==0) {
+        if(radius==20) {
             flag = 0;
         }
 
@@ -91,14 +98,14 @@ public class ProgressArc extends Animators {
         Rect bounds = getBounds();
         float x = ((bounds.right - bounds.left) / 2f) + bounds.left;
         float y = ((bounds.bottom - bounds.top) / 2f) + bounds.top;
-       /* canvas.drawColor(Color.TRANSPARENT);
-        canvas.drawCircle(x, y, radius, mPaint);
-        canvas.drawCircle(x, y, (float) (radius/1.5), mPaint);
+        canvas.drawColor(Color.TRANSPARENT);
+        //canvas.drawCircle(x, y, radius, mPaint);
+        /*canvas.drawCircle(x, y, (float) (radius/1.5), mPaint);
         canvas.drawCircle(x, y, (float) (radius/2.5), mPaint);*/
-        if(flag==0)
-           canvas.drawArc(rect, 0, radius, true, mPaint);
+       if(flag==0)
+            canvas.drawCircle(x, y, radius+20, mPaint);
         if(flag==1)
-            canvas.drawArc(rect, 0, 360-radius, true, mPaint);
+            canvas.drawCircle(x, y, mRadius-radius-20, mPaint);
 
 
     }
@@ -108,7 +115,7 @@ public class ProgressArc extends Animators {
         if (isRunning()) {
             float loopMillis = 2000;
 
-            loopPercent = (AnimationUtils.currentAnimationTimeMillis() - (mStartTicks) )/ loopMillis*2f;
+            loopPercent = (AnimationUtils.currentAnimationTimeMillis() - (mStartTicks) )/ loopMillis;
             while (loopPercent > 1) {
                 loopPercent -= 1;
                 mStartTicks += loopMillis;
