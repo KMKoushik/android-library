@@ -2,7 +2,7 @@
 <resources>
 
     <declare-styleable name="LoadingView">
-        <attr name="indicatorName" format="string"/>
-        <attr name="indicatorColor" format="color"/>
+        <attr name="animatorName" format="string"/>
+        <attr name="animatorColor" format="color"/>
     </declare-styleable>
 </resources>
