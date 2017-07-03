@@ -1,9 +1,4 @@
-package com.hyttetech.library;
-
-/**
- * Created by koushik on 1/7/17.
- */
-
+package com.hyttetech.library.view;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -11,6 +6,8 @@ import android.graphics.Color;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 
+import com.hyttetech.library.Animators;
+import com.hyttetech.library.R;
 import com.hyttetech.library.animators.ExpandingCircle;
 
 /**
@@ -40,8 +37,8 @@ public class LoadingView extends android.support.v7.widget.AppCompatImageView  {
     {
         final TypedArray a = context.obtainStyledAttributes(
                 attributeSet, R.styleable.LoadingView, defStyleAttr, defStyleRes);
-        String animatorName=a.getString(R.styleable.LoadingView_indicatorName);
-        animColor=a.getColor(R.styleable.LoadingView_indicatorColor, Color.WHITE);
+        String animatorName=a.getString(R.styleable.LoadingView_animatorName);
+        animColor=a.getColor(R.styleable.LoadingView_animatorColor, Color.WHITE);
         if(animatorName!=null) {
             setAnimator(animatorName);
         }

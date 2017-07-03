@@ -1,4 +1,4 @@
-package com.hyttetech.library;
+package com.hyttetech.library.view;
 
 import android.content.Context;
 import android.graphics.Color;
