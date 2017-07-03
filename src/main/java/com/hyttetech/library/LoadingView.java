@@ -6,6 +6,8 @@ package com.hyttetech.library;
 
 
 import android.content.Context;
+import android.content.res.TypedArray;
+import android.graphics.Color;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 
@@ -18,47 +20,54 @@ import com.hyttetech.library.animators.ExpandingCircle;
 public class LoadingView extends android.support.v7.widget.AppCompatImageView  {
 
     Animators animator=new ExpandingCircle(100);
+    int animColor=Color.MAGENTA;
     public LoadingView(Context context) {
         super(context);
-        init(null,0);
+        init(context,null,0,0);
     }
 
     public LoadingView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
-        init(attrs,0);
+        init(context,attrs,0,0);
     }
 
     public LoadingView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        init(attrs,defStyleAttr);
+        init(context,attrs,defStyleAttr,0);
     }
 
-    private void init(AttributeSet attributeSet,int defStyleAttr)
+    private void init(Context context,AttributeSet attributeSet,int defStyleAttr,int defStyleRes)
     {
-        setImageDrawable(animator);
-        animator.start();
-
-
+        final TypedArray a = context.obtainStyledAttributes(
+                attributeSet, R.styleable.LoadingView, defStyleAttr, defStyleRes);
+        String animatorName=a.getString(R.styleable.LoadingView_indicatorName);
+        animColor=a.getColor(R.styleable.LoadingView_indicatorColor, Color.WHITE);
+        if(animatorName!=null) {
+            setAnimator(animatorName);
+        }
+        else
+            setAnimator(animator);
     }
 
     public void setAnimator(Animators animators) {
-        animator= animators;
-        System.out.print("hiii");
-
-
-        if (animator != null) {
+        if (animators != null) {
+            animator= animators;
             animator.setCallback(this);
+            animator.setColor(animColor);
             setImageDrawable(animator);
-            System.out.print("hiii1");
-
+            animator.start();
         }
         postInvalidate();
+    }
 
+    public void setAnimColor(int color)
+    {
+        animColor=color;
+        setAnimator(animator);
     }
 
     public void setAnimator(String animatorName)
     {
-        System.out.print("hii :"+animatorName);
         StringBuilder drawableClassName=new StringBuilder();
         if (!animatorName.contains(".")){
             String defaultPackageName=getClass().getPackage().getName();
@@ -67,7 +76,6 @@ public class LoadingView extends android.support.v7.widget.AppCompatImageView  {
                     .append(".");
         }
         drawableClassName.append(animatorName);
-        System.out.print("hii :"+drawableClassName);
         try {
             Class<?> drawableClass = Class.forName(drawableClassName.toString());
             Animators animators = (Animators) drawableClass.newInstance();

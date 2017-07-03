@@ -19,6 +19,7 @@ import com.hyttetech.library.Animators;
 public class ProgressArc extends Animators {
     private Paint mPaint;
     private float mRadius;
+    int flag=0;
 
     private long mStartTicks = 0;
     private boolean mIsRunning = false;
@@ -62,7 +63,7 @@ public class ProgressArc extends Animators {
 
     @Override
     public void draw(Canvas canvas) {
-        int flag=0;
+
         int canvasW = canvas.getWidth();
         int canvasH = canvas.getHeight();
         Point centerOfCanvas = new Point(canvasW / 2, canvasH / 2);
@@ -95,10 +96,10 @@ public class ProgressArc extends Animators {
         canvas.drawCircle(x, y, radius, mPaint);
         canvas.drawCircle(x, y, (float) (radius/1.5), mPaint);
         canvas.drawCircle(x, y, (float) (radius/2.5), mPaint);*/
-        if(flag==0)
+       /* if(flag==0)*/
            canvas.drawArc(rect, 0, radius, true, mPaint);
-        if(flag==1)
-            canvas.drawArc(rect, 0, 360-radius, true, mPaint);
+       /* if(flag==1)
+            canvas.drawArc(rect, 0, 360-radius, true, mPaint);*/
 
 
     }

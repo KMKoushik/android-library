@@ -8,74 +8,81 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.ColorFilter;
 import android.graphics.Paint;
+import android.graphics.Path;
 import android.graphics.PixelFormat;
+import android.graphics.Point;
 import android.graphics.Rect;
+import android.graphics.RectF;
 import android.graphics.drawable.Animatable;
 import android.graphics.drawable.Drawable;
+import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.view.animation.RotateAnimation;
 
 import com.hyttetech.library.Animators;
 
-public class ExpandingRectangle extends Animators {
+public class ArcLoader extends Animators {
 
     private Paint mPaint;
     private float mRadius;
+    private Path circle;
 
     private long mStartTicks = 0;
     private boolean mIsRunning = false;
 
-    public ExpandingRectangle()
+    public ArcLoader()
     {
         super();
 
-        mRadius = 100;
+        mRadius = 360;
 
         mPaint = new Paint();
 
-        mPaint.setStyle(Paint.Style.FILL);
+        mPaint.setStyle(Paint.Style.STROKE);
         mPaint.setColor(Color.BLACK);
         mPaint.setAntiAlias(true);
-        mPaint.setStrokeWidth(2);
+        mPaint.setStrokeWidth(10);
     }
 
-    public ExpandingRectangle(float radius) {
+    public ArcLoader(float radius) {
         super();
 
         mRadius = radius;
 
         mPaint = new Paint();
 
-        mPaint.setStyle(Paint.Style.FILL);
+        mPaint.setStyle(Paint.Style.STROKE);
         mPaint.setColor(Color.BLACK);
         mPaint.setAntiAlias(true);
-        mPaint.setStrokeWidth(2);
+        mPaint.setStrokeWidth(20);
     }
 
     @Override
     public void draw(Canvas canvas) {
+
+        int canvasW = canvas.getWidth();
+        int canvasH = canvas.getHeight();
+        Point centerOfCanvas = new Point(canvasW / 2, canvasH / 2);
+        int rectW = 100;
+        int rectH = 100;
+        int left = centerOfCanvas.x - (rectW / 2);
+        int top = centerOfCanvas.y - (rectH / 2);
+        int right = centerOfCanvas.x + (rectW / 2);
+        int bottom = centerOfCanvas.y + (rectH / 2);
+        RectF rect = new RectF(left, top, right, bottom);
         float loopPercent = calculateCurrentLoopPercent();
-
-        float alpha = -(loopPercent * loopPercent) + 1;
-
-        mPaint.setAlpha((int) (255 * alpha));
-
         float radius = loopPercent * mRadius;
-
         Rect bounds = getBounds();
         float x = ((bounds.right - bounds.left) / 2f) + bounds.left;
         float y = ((bounds.bottom - bounds.top) / 2f) + bounds.top;
-
-        //canvas.drawCircle(x, y, radius, mPaint);
-        //canvas.drawRect(,y,radius,y,mPaint);
-        //canvas.drawRect(radius,radius,radius,radius,mPaint);
-        canvas.drawRect(100,100,100,100,mPaint);
+        canvas.drawArc(rect, radius,radius+2, false, mPaint);
     }
-
     private float calculateCurrentLoopPercent() {
-        float loopPercent = 0.5f;
+        float loopPercent =0.0f;
         if (isRunning()) {
-            float loopMillis = 1000;
-            loopPercent = (AnimationUtils.currentAnimationTimeMillis() - mStartTicks) / loopMillis;
+            float loopMillis =2600;
+
+            loopPercent = (AnimationUtils.currentAnimationTimeMillis() - (mStartTicks) )/ loopMillis*2f;
             while (loopPercent > 1) {
                 loopPercent -= 1;
                 mStartTicks += loopMillis;
@@ -84,6 +91,9 @@ public class ExpandingRectangle extends Animators {
 
         return loopPercent;
     }
+
+
+
 
     @Override
     public void run() {
@@ -98,7 +108,7 @@ public class ExpandingRectangle extends Animators {
 
     @Override
     public void setRadius(float radius) {
-        mRadius=radius;
+        mRadius=360;
     }
 
     @Override
