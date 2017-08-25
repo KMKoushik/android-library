@@ -13,34 +13,34 @@ public class DialogUtil {
 
     static boolean isOK;
 
-    public static boolean showSimpleDialog(String title, String message, Context context)
+    public static void showSimpleDialog(String title, String message, Context context)
     {
+        try {
 
-        AlertDialog.Builder alert = new AlertDialog.Builder(context);
-        alert.setTitle(title);
-        alert.setMessage(message);
-        alert.setPositiveButton("OK", new DialogInterface.OnClickListener()
+            AlertDialog.Builder alert = new AlertDialog.Builder(context);
+            alert.setTitle(title);
+            alert.setMessage(message);
+            alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    isOK = true;
+                }
+            });
+            alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+                }
+            });
+
+            alert.show();
+        }catch (Exception e)
         {
+            e.printStackTrace();
+        }
 
-            @Override
-            public void onClick(DialogInterface dialog, int which)
-            {
-                isOK = true;
-            }
-        });
-        alert.setNegativeButton("Cancel",new DialogInterface.OnClickListener()
-        {
-
-            @Override
-            public void onClick(DialogInterface dialog, int which)
-            {
-
-            }
-        });
-
-        alert.show();
-
-        return isOK;
     }
 
 
